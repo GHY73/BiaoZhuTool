@@ -14,3 +14,4 @@
 ## 在运行mainwin.py前，需要依据自己的.json数据以及标签（tags）需求，对标注工具进行一些设置。设置分为3步。
 ## 查看mainwin.py，依据提示，依次进行设置。
 # 界面展示
+![https://github.com/GHY73/BiaoZhuTool/blob/master/%E6%A0%87%E6%B3%A8%E4%B8%BB%E7%95%8C%E9%9D%A2.png?raw=true]
