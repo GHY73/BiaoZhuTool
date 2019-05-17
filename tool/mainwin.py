@@ -26,7 +26,7 @@ record_path = '../data/records/record_01.txt'  # 标注文件的位置
 # 改为自己json文件对应的键值
 id_str = 'id'  # 主键，唯一
 content_str = 'content'  # 文本内容
-"""===============================step1调整结束，step2在mainwin.py中====================="""
+"""===============================step1调整结束，step2在basewin.py中====================="""
 sys.setrecursionlimit(Numbers + 100)
 
 
