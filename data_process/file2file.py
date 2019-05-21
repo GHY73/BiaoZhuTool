@@ -165,10 +165,8 @@ if __name__ == '__main__':
     所有利用代码生成的.json文件，还不是最后可以标注的文件，
     需要手动在该.json文件外部嵌套上一层"data:"，形式如下：
     {
-        "data":
-              { 
-                我的json文件
-              }
+        "data":          
+                我的json文件            
     }
     """
     print ('file2file.py is running...')
