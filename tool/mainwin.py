@@ -168,7 +168,7 @@ class MainWindows(MyFrame1):
             wx.MessageBox(u'请选择一种要标注的关键字类型', u'警告', wx.OK | wx.ICON_EXCLAMATION)
             return False
         elif len(words) > MaxLengthOfKeyWord:
-            a = wx.MessageBox(words + ' \n\n是否选为关键词?', '关键词过长验证', wx.YES_NO | wx.ICON_EXCLAMATION)
+            a = wx.MessageBox(words + u' \n\n是否选为关键词?', u'关键词过长验证', wx.YES_NO | wx.ICON_EXCLAMATION)
             if not a == wx.YES:
                 return False
         elif len(words) < 2:
