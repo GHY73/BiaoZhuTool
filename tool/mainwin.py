@@ -23,7 +23,7 @@ MaxLengthOfKeyWord = 15  # 中心词最大长度
 Tag_flag = 0  # value = 0 or -1; 如果Tag_flag=-1，则可以不选tag，也可以进行下一条内容的标注
 data_path = '../data/example.json'  # 待标注文件的路径
 record_path = '../data/records/record_01.txt'  # 标注文件的位置
-# 改为自己json文件对应的键值
+# id_str改为自己json文件对应的键值,content_str改为想显示的内容
 # 中文键要在字符串前加上u，比如id_str = u'序号'
 id_str = 'id'  # 主键，唯一
 content_str = 'content'  # 文本内容
@@ -82,7 +82,7 @@ class MainWindows(MyFrame1):
             self.cur_progress += 1
             return self.print_content()
         # 标注界面显示的标题
-        title = cur_doc[id_str] + '-----' + u'这里可以继续添加标题内容，当前显示了数据的id'
+        title = str(cur_doc[id_str]) + '-----' + u'这里可以继续添加标题内容，当前显示了数据的id'
         content = cur_doc[content_str]
         self.title.SetLabel(title)
         self.redefine_Textctrl_write(self.content, content)
