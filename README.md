@@ -13,7 +13,8 @@
 ###           ----data/example.json：包含待标注文件
 ###           ----data/records/record_01.txt：标注结果
 ##      data_process文件夹
-###           ----file2file.py：文件处理工具，用来处理自己的数据，生成最终的符合要求的.json数据
+###           ----file2file.py：文件处理类
+###           ----generate_json.py:生成最终的符合标注要求的.json数据
 ##      tool文件夹
 ###           ----basewin.py：主要是界面布局
 ###           ----mainwin.py：包含标注程序的主要逻辑，包含主函数，继承了basewin.py中的类。
