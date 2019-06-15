@@ -6,12 +6,9 @@
 import pandas as pd
 import re
 import jieba
-"""
-file2file类，是自己写的常用的文件类型转化函数，
-在实际处理自己的文件时，有时要灵活调整code
-"""
 
 class file2file:
+
     def gbk_csv2utf8_csv(self, inpath, outpath, splitchar=','):
         """国标csv文件-->utf-8csv文件（处理乱码）"""
         all_datas = []
@@ -43,13 +40,13 @@ class file2file:
         data = pd.read_csv(inpath, usecols=column_number_list)
         data.to_csv(outpath, encoding="utf-8-sig", index=index,header=head_name_list)
 
-    def full_csv2part_csv_byrows(self,inpath,outpath,skiprow,nrow):
-        """读取指定行，skiprow表示跳过多少行，nrow表示读多少行，第一行header不计入行数"""
+    def full_csv2part_csv_byrows(self,inpath,outpath,skiprow,nrow,index=False,index_label='index'):
+        """读取指定行，skip表示跳过多少行，nrow表示读多少行，第一行header不计入行数"""
         data = pd.read_csv(inpath, skiprows=skiprow, nrows=nrow)
-        data.to_csv(outpath)
+        data.to_csv(outpath,index=index,index_label=index_label)
 
     def full_csv2part_txt(self,inpath,outpath,column_name_list):
-        """从csv中提取出某几列，构造新的txt，column_name_list指定列名"""
+        """从csv中提取出某几列，构造新的txt,column_name_list指定列名"""
         data = pd.read_csv(inpath)
         content = []
         # 自定义正则，去掉括号及内容
@@ -77,13 +74,13 @@ class file2file:
             # 每次写入1行，io没有优化
             open(outpath, 'a+').write(temp_str)
 
-    def txt2csv(self,inpath,outpath,columnnamelist,index=False,splitchar = ' '):
+    def txt2csv(self,inpath,outpath,columnnamelist,index=False,splitchar=' ',index_label='index'):
         """读取txt文件，按txt的列，转为csv文件，手动指定csv各列列名list"""
         datas = self.readtxt(inpath,splitchar=splitchar)
         columns = columnnamelist
         # 构造DataFrame格式数据
         csvdatas = pd.DataFrame(columns=columns, data=datas)
-        csvdatas.to_csv(outpath,index=index, sep='\t')
+        csvdatas.to_csv(outpath,index=index, sep='\t', index_label=index_label)
 
     def txt2pickle(self,inpath,outpath,columnnamelist):
         """读取txt文件，按txt的列，转为pickle文件，手动指定pickle各列列名list"""
@@ -132,42 +129,39 @@ class file2file:
                 temp = ''
         open(outpath, 'a+').write(temp)
 
-    def txt2jieba_stopwords(self,txtinpath,stopwordspath,outpath):
+    def txt2jieba_stopwords(self,txtinpath,stopwordspath,outpath,splitchar=' '):
         # 读入待处理数据
-        datas = self.readtxt(txtinpath, splitchar=' ')
+        datas = self.readtxt(txtinpath, splitchar=splitchar)
         # 读入停用词，并且使list一维化
         stopwords = set(sum(self.readtxt(stopwordspath), []))
         labels = []
         contents = []
         # 循环处理
+        count = 0
         for i in datas:
+            count += 1
             labels.append(i[0])
-
             # 分词
-            content = jieba.lcut(i[1])
-            k = []
-            for each in content:
-                k.append(each.encode('utf-8'))
+            temp = i[1].replace(' ','')
+            content = jieba.lcut(temp.replace(' ',''))
+            # k = []
+            # for each in content:
+            #     k.append(each.encode('utf-8'))
             # 去停用词
-            cut_data = [word for word in k if word not in stopwords]
+            cut_data = [word for word in content if word not in stopwords]
             contents.append(' '.join(cut_data))
+            if count % 50 == 0:
+                print('分词到第{}条'.format(count))
         # 写入本地
         write_txt = ''
         for i in range(len(labels)):
-            write_txt = write_txt + labels[i] + ' ' + contents[i] + '\n'
-        open(outpath, 'w').write(write_txt)
+            write_txt = write_txt + labels[i] + '\t' + contents[i] + '\n'
+            if i % 50 == 0:
+                print('deal with {}'.format(i))
+                open(outpath, 'a+').write(write_txt)
+                write_txt = ''
+        open(outpath, 'a+').write(write_txt)
 
 
 if __name__ == '__main__':
-    f = file2file()
-    """
-    自己处理文件，生成.txt或.csv对应的.json文件，
-    所有利用代码生成的.json文件，还不是最后可以标注的文件，
-    需要手动在该.json文件外部嵌套上一层"data:"，形式如下：
-    {
-        "data":          
-                我的json文件            
-    }
-    """
-    print ('file2file.py is running...')
-
+    print('file2file.py is running...')
